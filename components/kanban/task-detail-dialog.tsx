@@ -114,7 +114,7 @@ export function TaskDetailDialog({
       .order('created_at')
     if (!error && data) {
       // Fetch profiles for comment authors
-      const userIds = [...new Set(data.map(c => c.user_id))]
+      const userIds = Array.from(new Set(data.map(c => c.user_id)))
       if (userIds.length > 0) {
         const { data: profiles } = await supabase
           .from('profiles')
