@@ -174,7 +174,7 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
           {/* Dashboard */}
           <Link
             href="/dashboard"
-            onClick={(e) => handleNavClick('/dashboard', e)}
+onClick={(e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick('/dashboard', e)}
             className={cn(
               'sidebar-item',
               pathname === '/dashboard' && 'active',
