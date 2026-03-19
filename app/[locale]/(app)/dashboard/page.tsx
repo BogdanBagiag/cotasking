@@ -56,7 +56,7 @@ export default async function DashboardPage({
     : ['00000000-0000-0000-0000-000000000000']
 
   // ═══ ALL data queries in PARALLEL ═══
-  const [{ data: projects }, { data: allTasks }, { data: allMembers }] = await Promise.all([
+  const [{ data: projectsRaw }, { data: allTasks }, { data: allMembers }] = await Promise.all([
     supabase
       .from('projects')
       .select('id, name, color, workspace_id, workspaces(name, slug)')
@@ -76,6 +76,12 @@ export default async function DashboardPage({
       .in('workspace_id', workspaceIds),
   ])
 
+  // Normalize workspaces from array to single object (Supabase returns array for joins)
+  const projects = (projectsRaw || []).map(p => ({
+    ...p,
+    workspaces: Array.isArray(p.workspaces) ? p.workspaces[0] : p.workspaces,
+  }))
+
   return (
     <DashboardClient
       greeting={greeting}
@@ -83,7 +89,7 @@ export default async function DashboardPage({
       locale={locale}
       currentUserId={user.id}
       workspaces={workspaces || []}
-      projects={projects || []}
+      projects={projects as any}
       tasks={allTasks || []}
       members={allMembers || []}
     />
