@@ -9,14 +9,14 @@ export function LanguageSwitcher() {
   const router = useRouter()
   const pathname = usePathname()
 
-  function switchLocale(newLocale: string) {
+  function switchLocale(newLocale: 'ro' | 'en') {
     router.replace(pathname, { locale: newLocale })
   }
 
   return (
     <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-1">
       <Globe className="w-3.5 h-3.5 text-muted-foreground ml-1" />
-      {['ro', 'en'].map((loc) => (
+      {(['ro', 'en'] as const).map((loc) => (
         <button
           key={loc}
           onClick={() => switchLocale(loc)}
