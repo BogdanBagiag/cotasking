@@ -71,7 +71,7 @@ export function KanbanBoard({
       const destColumn = columns.find((c) => c.id === destination.droppableId)
       if (!sourceColumn || !destColumn) return
 
-      const newColumns = columns.map((col) => ({ ...col, tasks: [...col.tasks] }))
+      const newColumns = columns.map((col) => ({ ...col, tasks: [...(col.tasks || [])] }))
       const srcCol = newColumns.find((c) => c.id === source.droppableId)!
       const dstCol = newColumns.find((c) => c.id === destination.droppableId)!
 
@@ -128,7 +128,7 @@ export function KanbanBoard({
 
   const handleTaskMoved = useCallback((taskId: string, fromColumnId: string, toColumnId: string) => {
     setColumns((prev) => {
-      const newCols = prev.map((col) => ({ ...col, tasks: [...col.tasks] }))
+      const newCols = prev.map((col) => ({ ...col, tasks: [...(col.tasks || [])] }))
       const srcCol = newCols.find((c) => c.id === fromColumnId)
       const dstCol = newCols.find((c) => c.id === toColumnId)
       if (!srcCol || !dstCol) return prev
