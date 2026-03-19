@@ -185,7 +185,7 @@ export function KanbanColumn({
         {/* Color dot */}
         <div
           className="w-3 h-3 rounded-full shrink-0 ring-2 ring-offset-1"
-          style={{ backgroundColor: color, ringColor: `rgba(${rgb}, 0.3)` }}
+          style={{ backgroundColor: color, outlineColor: `rgba(${rgb}, 0.3)` }}
         />
 
         {/* Name */}
