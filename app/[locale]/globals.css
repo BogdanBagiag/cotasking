@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 14% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 14% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 14% 10%;
+
+    --primary: 213 94% 47%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 224 14% 10%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 224 14% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 213 94% 47%;
+
+    --radius: 0.625rem;
+
+    /* CoTasking custom tokens */
+    --sidebar-width: 260px;
+    --header-height: 56px;
+  }
+
+  .dark {
+    --background: 224 14% 8%;
+    --foreground: 220 14% 96%;
+
+    --card: 224 14% 11%;
+    --card-foreground: 220 14% 96%;
+
+    --popover: 224 14% 11%;
+    --popover-foreground: 220 14% 96%;
+
+    --primary: 213 94% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 224 14% 16%;
+    --secondary-foreground: 220 14% 96%;
+
+    --muted: 224 14% 16%;
+    --muted-foreground: 220 9% 60%;
+
+    --accent: 224 14% 16%;
+    --accent-foreground: 220 14% 96%;
+
+    --destructive: 0 62% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 224 14% 18%;
+    --input: 224 14% 18%;
+    --ring: 213 94% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Outfit', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  code, pre, kbd {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  /* Scrollbar styling */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 2px;
+  }
+
+  /* Kanban card styles */
+  .kanban-card {
+    @apply bg-card border border-border rounded-lg p-3 shadow-sm 
+           cursor-pointer transition-all duration-150
+           hover:shadow-md hover:border-primary/30;
+  }
+
+  .kanban-card.dragging {
+    @apply shadow-xl rotate-2 scale-105 border-primary/50;
+  }
+
+  /* Column drop zone */
+  .kanban-column-drop {
+    @apply border-2 border-dashed border-primary/40 bg-primary/5 rounded-lg;
+  }
+
+  /* Priority badge */
+  .priority-urgent { @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400; }
+  .priority-high { @apply bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400; }
+  .priority-medium { @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400; }
+  .priority-low { @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400; }
+
+  /* Due date status */
+  .due-overdue { @apply text-red-600 dark:text-red-400; }
+  .due-today { @apply text-orange-600 dark:text-orange-400; }
+  .due-soon { @apply text-yellow-600 dark:text-yellow-400; }
+  .due-future { @apply text-muted-foreground; }
+
+  /* Sidebar */
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium
+           text-muted-foreground transition-colors duration-150
+           hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .sidebar-item.active {
+    @apply bg-primary/10 text-primary;
+  }
+
+  /* Page animation */
+  .page-enter {
+    animation: fade-in 0.2s ease-out;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gradient-brand {
+    background: linear-gradient(135deg, hsl(var(--primary)), #7c3aed);
+  }
+
+  .gradient-subtle {
+    background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+  }
+}
+
+/* Kanban horizontal scroll */
+.kanban-board {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  min-height: calc(100vh - var(--header-height) - 120px);
+}
+
+.kanban-column {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--header-height) - 140px);
+}
+
+.kanban-tasks {
+  overflow-y: auto;
+  flex: 1;
+}

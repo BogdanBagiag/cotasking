@@ -1,0 +1,4 @@
+Nu se actualizeaz checklist-ul
+Nu se pot modifica item-urile din checklist
+Drept de rescriere pe card-uri pentru admin
+Daca sunt mai putine carduri cand vreau sa schimb setarile pe carduri repetitive nu pot da scroll la salveaza sau elimina

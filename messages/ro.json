@@ -1,0 +1,290 @@
+{
+  "common": {
+    "loading": "Se încarcă...",
+    "save": "Salvează",
+    "cancel": "Anulează",
+    "delete": "Șterge",
+    "edit": "Editează",
+    "create": "Creează",
+    "confirm": "Confirmă",
+    "back": "Înapoi",
+    "next": "Următorul",
+    "search": "Caută...",
+    "noResults": "Niciun rezultat",
+    "error": "A apărut o eroare",
+    "success": "Succes",
+    "required": "Obligatoriu",
+    "optional": "Opțional",
+    "actions": "Acțiuni",
+    "settings": "Setări",
+    "close": "Închide",
+    "open": "Deschide",
+    "copy": "Copiază",
+    "copied": "Copiat!",
+    "or": "sau",
+    "and": "și",
+    "yes": "Da",
+    "no": "Nu",
+    "all": "Toate",
+    "none": "Niciunul",
+    "free": "Gratuit",
+    "upgrade": "Upgrade",
+    "comingSoon": "În curând"
+  },
+  "nav": {
+    "dashboard": "Panou principal",
+    "projects": "Proiecte",
+    "boards": "Board-uri",
+    "members": "Membri",
+    "settings": "Setări",
+    "holidays": "Zile libere",
+    "notifications": "Notificări",
+    "billing": "Abonament",
+    "help": "Ajutor",
+    "logout": "Deconectare"
+  },
+  "auth": {
+    "login": "Conectare",
+    "register": "Înregistrare",
+    "logout": "Deconectare",
+    "email": "Email",
+    "password": "Parolă",
+    "confirmPassword": "Confirmă parola",
+    "fullName": "Nume complet",
+    "forgotPassword": "Ai uitat parola?",
+    "resetPassword": "Resetează parola",
+    "noAccount": "Nu ai cont?",
+    "hasAccount": "Ai deja cont?",
+    "signUpFree": "Înregistrează-te gratuit",
+    "loginWith": "Conectează-te cu {provider}",
+    "orContinueWith": "sau continuă cu",
+    "agreeTo": "Prin înregistrare ești de acord cu",
+    "terms": "Termenii și condițiile",
+    "privacy": "Politica de confidențialitate",
+    "emailSent": "Email trimis! Verifică inbox-ul.",
+    "checkEmail": "Verifică emailul pentru link-ul de confirmare.",
+    "invalidCredentials": "Email sau parolă incorectă",
+    "passwordMismatch": "Parolele nu se potrivesc",
+    "passwordTooShort": "Parola trebuie să aibă cel puțin 8 caractere"
+  },
+  "workspace": {
+    "title": "Workspace",
+    "create": "Creează workspace",
+    "name": "Nume workspace",
+    "slug": "URL workspace",
+    "description": "Descriere",
+    "logo": "Logo",
+    "plan": "Plan",
+    "members": "Membri",
+    "inviteMember": "Invită un membru",
+    "inviteEmail": "Email-ul persoanei de invitat",
+    "roles": {
+      "owner": "Proprietar",
+      "admin": "Administrator",
+      "manager": "Manager",
+      "member": "Membru",
+      "viewer": "Vizitator"
+    },
+    "noWorkspace": "Nu ai niciun workspace",
+    "createFirst": "Creează primul tău workspace pentru a începe",
+    "switchWorkspace": "Schimbă workspace-ul",
+    "deleteConfirm": "Ești sigur că vrei să ștergi acest workspace? Această acțiune nu poate fi anulată."
+  },
+  "project": {
+    "title": "Proiecte",
+    "create": "Proiect nou",
+    "name": "Numele proiectului",
+    "description": "Descriere",
+    "color": "Culoare",
+    "boards": "Board-uri",
+    "noProjects": "Nu există proiecte",
+    "createFirst": "Creează primul proiect",
+    "deleteConfirm": "Ești sigur că vrei să ștergi acest proiect?",
+    "limitReached": "Ai atins limita de proiecte pentru planul Free. Fă upgrade pentru mai multe."
+  },
+  "board": {
+    "title": "Board",
+    "create": "Board nou",
+    "name": "Numele board-ului",
+    "noBoards": "Nu există board-uri",
+    "createFirst": "Creează primul board",
+    "addColumn": "Adaugă coloană",
+    "columnName": "Numele coloanei",
+    "deleteColumn": "Șterge coloana",
+    "deleteColumnConfirm": "Ești sigur? Toate task-urile din această coloană vor fi șterse."
+  },
+  "task": {
+    "title": "Task",
+    "create": "Task nou",
+    "name": "Titlul task-ului",
+    "description": "Descriere",
+    "assignee": "Asignat la",
+    "dueDate": "Data limită",
+    "priority": "Prioritate",
+    "labels": "Etichete",
+    "subtasks": "Subtask-uri",
+    "comments": "Comentarii",
+    "addComment": "Adaugă un comentariu...",
+    "addSubtask": "Adaugă subtask",
+    "noDescription": "Fără descriere",
+    "priorities": {
+      "urgent": "Urgent",
+      "high": "Ridicată",
+      "medium": "Medie",
+      "low": "Scăzută"
+    },
+    "status": {
+      "todo": "De făcut",
+      "inProgress": "În progres",
+      "done": "Finalizat"
+    },
+    "dueDatePast": "Depășit",
+    "dueDateToday": "Azi",
+    "dueDateSoon": "Curând",
+    "holidayWarning": "Zi liberă - nu apar task-uri în această zi",
+    "complete": "Marchează ca finalizat",
+    "reopen": "Redeschide"
+  },
+  "holiday": {
+    "title": "Zile libere",
+    "add": "Adaugă zi liberă",
+    "name": "Denumire",
+    "date": "Data",
+    "recurring": "Recurentă anual",
+    "noHolidays": "Nu sunt zile libere configurate",
+    "addFirst": "Adaugă prima zi liberă pentru compania ta",
+    "deleteConfirm": "Ești sigur că vrei să ștergi această zi liberă?",
+    "premiumRequired": "Zilele libere sunt disponibile din planul Premium"
+  },
+  "notification": {
+    "title": "Notificări",
+    "markRead": "Marchează ca citit",
+    "markAllRead": "Marchează toate ca citite",
+    "noNotifications": "Nu ai notificări",
+    "types": {
+      "taskAssigned": "{user} ți-a asignat task-ul \"{task}\"",
+      "taskCommented": "{user} a comentat pe task-ul \"{task}\"",
+      "taskDue": "Task-ul \"{task}\" este scadent mâine",
+      "taskOverdue": "Task-ul \"{task}\" a depășit termenul",
+      "memberInvited": "{user} te-a invitat în workspace-ul \"{workspace}\"",
+      "memberJoined": "{user} s-a alăturat workspace-ului"
+    }
+  },
+  "pricing": {
+    "title": "Planuri și prețuri",
+    "subtitle": "Alege planul potrivit pentru tine sau echipa ta",
+    "monthly": "Lunar",
+    "annual": "Anual",
+    "annualDiscount": "Economisești 20%",
+    "currentPlan": "Planul curent",
+    "choosePlan": "Alege planul",
+    "mostPopular": "Cel mai popular",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": "0€",
+        "description": "Perfect pentru a începe",
+        "features": [
+          "1 Workspace",
+          "Până la 3 proiecte",
+          "Până la 5 membri",
+          "1 Board per proiect",
+          "Task-uri și comentarii",
+          "Due dates",
+          "Până la 5 etichete"
+        ]
+      },
+      "premium": {
+        "name": "Premium",
+        "price": "9€",
+        "description": "Pentru echipe în creștere",
+        "features": [
+          "1 Workspace",
+          "Proiecte nelimitate",
+          "Până la 25 de membri",
+          "Board-uri nelimitate",
+          "Subtask-uri",
+          "Email reminders",
+          "Zile libere custom",
+          "Etichete nelimitate",
+          "Roluri avansate"
+        ]
+      },
+      "premiumPlus": {
+        "name": "Premium Plus",
+        "price": "19€",
+        "description": "Pentru organizații mari",
+        "features": [
+          "Workspace-uri nelimitate",
+          "Proiecte nelimitate",
+          "Membri nelimitați",
+          "Board-uri nelimitate",
+          "Subtask-uri",
+          "Email reminders",
+          "Zile libere custom",
+          "Etichete nelimitate",
+          "Roluri avansate",
+          "Rapoarte și statistici",
+          "Export CSV/PDF",
+          "Priority support"
+        ]
+      }
+    }
+  },
+  "landing": {
+    "hero": {
+      "badge": "Nou · Acum disponibil",
+      "title": "Gestionează proiectele echipei tale cu ușurință",
+      "subtitle": "CoTasking este platforma Kanban modernă pentru companii și freelanceri. Organizează, prioritizează și livrează mai rapid.",
+      "cta": "Începe gratuit",
+      "ctaSecondary": "Vezi demo",
+      "noCard": "Nu este necesară un card de credit"
+    },
+    "features": {
+      "title": "Tot ce ai nevoie pentru productivitate maximă",
+      "subtitle": "Un set complet de instrumente pentru managementul proiectelor tale",
+      "kanban": {
+        "title": "Board Kanban vizual",
+        "description": "Drag & drop intuitiv, coloane personalizabile și vizualizare clară a progresului echipei."
+      },
+      "team": {
+        "title": "Colaborare în echipă",
+        "description": "Invită membri, asignează task-uri, lasă comentarii și urmărește cine face ce."
+      },
+      "holidays": {
+        "title": "Zile libere smart",
+        "description": "Configurează zilele libere ale companiei. Task-urile nu apar în zilele libere pentru o planificare realistă."
+      },
+      "notifications": {
+        "title": "Notificări în timp real",
+        "description": "Fii mereu la curent cu notificări in-app și email pentru task-uri asignate, comentarii și deadline-uri."
+      },
+      "multitenancy": {
+        "title": "Multi-tenant",
+        "description": "Fiecare companie are workspace-ul ei izolat, cu roluri și permisiuni granulare."
+      },
+      "i18n": {
+        "title": "Multilingv",
+        "description": "Interfață disponibilă în română și engleză, cu suport pentru mai multe limbi în viitor."
+      }
+    },
+    "cta": {
+      "title": "Gata să începi?",
+      "subtitle": "Alătură-te miilor de echipe care folosesc CoTasking pentru a livra mai rapid.",
+      "button": "Creează cont gratuit"
+    }
+  },
+  "dashboard": {
+    "welcome": "Bun venit, {name}!",
+    "overview": "Prezentare generală",
+    "myTasks": "Task-urile mele",
+    "recentActivity": "Activitate recentă",
+    "upcomingDeadlines": "Deadline-uri apropiate",
+    "stats": {
+      "totalProjects": "Total proiecte",
+      "activeTasks": "Task-uri active",
+      "completedToday": "Finalizate azi",
+      "teamMembers": "Membri echipă"
+    }
+  }
+}
