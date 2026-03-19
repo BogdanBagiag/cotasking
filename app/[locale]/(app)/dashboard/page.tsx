@@ -90,8 +90,8 @@ export default async function DashboardPage({
       currentUserId={user.id}
       workspaces={workspaces || []}
       projects={projects as any}
-      tasks={allTasks || []}
-      members={allMembers || []}
+      tasks={(allTasks || []) as any}
+      members={(allMembers || []) as any}
     />
   )
 }
