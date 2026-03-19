@@ -14,8 +14,10 @@ import { Plus, Settings2 } from 'lucide-react'
 import type { Board, Column, Task, WorkspaceMember, Holiday, Label, Workspace } from '@/types'
 import { useToast } from '@/components/ui/use-toast'
 
+type ColumnWithTasks = Column & { tasks: Task[] }
+
 interface KanbanBoardProps {
-  board: Board & { columns: (Column & { tasks: Task[] })[] }
+  board: Board & { columns: ColumnWithTasks[] }
   workspace: Workspace
   members: WorkspaceMember[]
   holidays: Holiday[]
@@ -36,13 +38,14 @@ export function KanbanBoard({
   const t = useTranslations()
   const { toast } = useToast()
   const supabase = createClient()
-  const [columns, setColumns] = useState(board.columns)
+  const [columns, setColumns] = useState<ColumnWithTasks[]>(
+    board.columns.map((col) => ({ ...col, tasks: col.tasks ?? [] }))
+  )
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [createColumnOpen, setCreateColumnOpen] = useState(false)
   const [repeatPanelOpen, setRepeatPanelOpen] = useState(false)
 
   const canEdit = userRole !== 'viewer'
-  // Only owner and admin can manage repeats & due dates
   const canManageRepeat = userRole === 'owner' || userRole === 'admin'
 
   const todayIsHoliday = isHoliday(new Date(), holidays)
@@ -71,7 +74,7 @@ export function KanbanBoard({
       const destColumn = columns.find((c) => c.id === destination.droppableId)
       if (!sourceColumn || !destColumn) return
 
-      const newColumns = columns.map((col) => ({ ...col, tasks: [...(col.tasks || [])] }))
+      const newColumns: ColumnWithTasks[] = columns.map((col) => ({ ...col, tasks: [...(col.tasks ?? [])] }))
       const srcCol = newColumns.find((c) => c.id === source.droppableId)!
       const dstCol = newColumns.find((c) => c.id === destination.droppableId)!
 
@@ -101,7 +104,7 @@ export function KanbanBoard({
   const handleTaskCreated = useCallback((columnId: string, task: Task) => {
     setColumns((prev) =>
       prev.map((col) =>
-        col.id === columnId ? { ...col, tasks: [...col.tasks, task] } : col
+        col.id === columnId ? { ...col, tasks: [...(col.tasks ?? []), task] } : col
       )
     )
   }, [])
@@ -110,7 +113,7 @@ export function KanbanBoard({
     setColumns((prev) =>
       prev.map((col) => ({
         ...col,
-        tasks: col.tasks.map((t) => (t.id === updatedTask.id ? { ...t, ...updatedTask } : t)),
+        tasks: (col.tasks ?? []).map((t) => (t.id === updatedTask.id ? { ...t, ...updatedTask } : t)),
       }))
     )
     setSelectedTask((prev) => prev ? { ...prev, ...updatedTask } : null)
@@ -120,7 +123,7 @@ export function KanbanBoard({
     setColumns((prev) =>
       prev.map((col) => ({
         ...col,
-        tasks: col.tasks.filter((t) => t.id !== taskId),
+        tasks: (col.tasks ?? []).filter((t) => t.id !== taskId),
       }))
     )
     setSelectedTask(null)
@@ -128,7 +131,7 @@ export function KanbanBoard({
 
   const handleTaskMoved = useCallback((taskId: string, fromColumnId: string, toColumnId: string) => {
     setColumns((prev) => {
-      const newCols = prev.map((col) => ({ ...col, tasks: [...(col.tasks || [])] }))
+      const newCols: ColumnWithTasks[] = prev.map((col) => ({ ...col, tasks: [...(col.tasks ?? [])] }))
       const srcCol = newCols.find((c) => c.id === fromColumnId)
       const dstCol = newCols.find((c) => c.id === toColumnId)
       if (!srcCol || !dstCol) return prev
@@ -166,7 +169,6 @@ export function KanbanBoard({
 
   return (
     <>
-      {/* Top bar with repeat management */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           {todayIsHoliday && (
@@ -247,7 +249,6 @@ export function KanbanBoard({
         </Droppable>
       </DragDropContext>
 
-      {/* Task detail dialog */}
       {selectedTask && (
         <TaskDetailDialog
           task={selectedTask}
@@ -275,7 +276,6 @@ export function KanbanBoard({
         onColumnCreated={handleColumnCreated}
       />
 
-      {/* Repeat management panel (admin only) */}
       {canManageRepeat && (
         <RepeatManagementPanel
           columns={columns}
