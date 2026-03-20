@@ -197,7 +197,7 @@ export function KanbanBoard({
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="kanban-board scrollbar-thin"
+              className="flex flex-col md:flex-row md:overflow-x-auto gap-4 pb-4 scrollbar-thin"
             >
               {columns.map((column, index) => (
                 <Draggable

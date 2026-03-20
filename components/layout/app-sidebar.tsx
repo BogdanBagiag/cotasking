@@ -56,10 +56,10 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
   const currentWorkspace = workspaces.find((w) => w.slug === currentSlug) || workspaces[0]
 
   function handleSwitchWorkspace(slug: string) {
-    setSwitcherOpen(false)
-    setMobileSwitcherOpen(false)
-    router.push(`/workspace/${slug}/projects`)
-  }
+  setSwitcherOpen(false)
+  setMobileSwitcherOpen(false)
+  router.push('/dashboard')
+}
 
   function handleNavClick(href: string, e: React.MouseEvent) {
     if (pathname.startsWith(href)) return

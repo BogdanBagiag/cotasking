@@ -156,9 +156,9 @@ export function KanbanColumn({
   return (
     <div
       className={cn(
-        'kanban-column w-[300px] rounded-xl overflow-hidden',
-        isDragging && 'opacity-80 shadow-xl'
-      )}
+  'w-full md:w-[300px] md:shrink-0 rounded-xl overflow-hidden',
+  isDragging && 'opacity-80 shadow-xl'
+)}
       style={{
         backgroundColor: `rgba(${rgb}, 0.04)`,
         border: `1px solid rgba(${rgb}, 0.15)`,
