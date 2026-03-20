@@ -10,7 +10,8 @@ import { CreateColumnDialog } from './create-column-dialog'
 import { RepeatManagementPanel } from './repeat-management-panel'
 import { Button } from '@/components/ui/button'
 import { isHoliday } from '@/lib/utils'
-import { Plus, Settings2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Plus, Settings2, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Board, Column, Task, WorkspaceMember, Holiday, Label, Workspace } from '@/types'
 import { useToast } from '@/components/ui/use-toast'
 
@@ -44,16 +45,15 @@ export function KanbanBoard({
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [createColumnOpen, setCreateColumnOpen] = useState(false)
   const [repeatPanelOpen, setRepeatPanelOpen] = useState(false)
+  const [mobileColIndex, setMobileColIndex] = useState(0)
 
   const canEdit = userRole !== 'viewer'
   const canManageRepeat = userRole === 'owner' || userRole === 'admin'
-
   const todayIsHoliday = isHoliday(new Date(), holidays)
 
   const handleDragEnd = useCallback(
     async (result: DropResult) => {
       if (!result.destination || !canEdit) return
-
       const { source, destination, type } = result
 
       if (type === 'COLUMN') {
@@ -61,7 +61,6 @@ export function KanbanBoard({
         const [removed] = newColumns.splice(source.index, 1)
         newColumns.splice(destination.index, 0, removed)
         setColumns(newColumns)
-
         await Promise.all(
           newColumns.map((col, index) =>
             supabase.from('columns').update({ position: index }).eq('id', col.id)
@@ -81,7 +80,6 @@ export function KanbanBoard({
       const [movedTask] = srcCol.tasks.splice(source.index, 1)
       movedTask.column_id = destination.droppableId
       dstCol.tasks.splice(destination.index, 0, movedTask)
-
       setColumns(newColumns)
 
       await supabase
@@ -142,10 +140,8 @@ export function KanbanBoard({
       const [task] = srcCol.tasks.splice(taskIndex, 1)
       task.column_id = toColumnId
       dstCol.tasks.unshift(task)
-
       return newCols
     })
-
     setSelectedTask((prev) =>
       prev && prev.id === taskId ? { ...prev, column_id: toColumnId } : prev
     )
@@ -157,6 +153,7 @@ export function KanbanBoard({
 
   const handleColumnDeleted = useCallback((columnId: string) => {
     setColumns((prev) => prev.filter((c) => c.id !== columnId))
+    setMobileColIndex((i) => Math.max(0, i - 1))
   }, [])
 
   const handleColumnUpdated = useCallback((updatedColumn: Column) => {
@@ -177,7 +174,6 @@ export function KanbanBoard({
             </div>
           )}
         </div>
-
         {canManageRepeat && (
           <Button
             variant="outline"
@@ -191,13 +187,70 @@ export function KanbanBoard({
         )}
       </div>
 
+      {/* ─── MOBILE: o coloană la un moment, butoane stânga/dreapta ─── */}
+      <div className="md:hidden">
+        {/* Navigare coloane */}
+        <div className="flex items-center justify-between mb-3">
+          <button
+            onClick={() => setMobileColIndex(i => Math.max(0, i - 1))}
+            disabled={mobileColIndex === 0}
+            className="p-2 rounded-lg hover:bg-accent disabled:opacity-30 transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <div className="flex items-center gap-1.5">
+            {columns.map((col, i) => (
+              <button
+                key={col.id}
+                onClick={() => setMobileColIndex(i)}
+                className={cn(
+                  'h-2 rounded-full transition-all',
+                  i === mobileColIndex ? 'w-4 bg-primary' : 'w-2 bg-muted-foreground/30'
+                )}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={() => setMobileColIndex(i => Math.min(columns.length - 1, i + 1))}
+            disabled={mobileColIndex === columns.length - 1}
+            className="p-2 rounded-lg hover:bg-accent disabled:opacity-30 transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Coloana curentă */}
+        {columns[mobileColIndex] && (
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <KanbanColumn
+              column={columns[mobileColIndex]}
+              dragHandleProps={null}
+              isDragging={false}
+              workspace={workspace}
+              members={members}
+              holidays={holidays}
+              labels={labels}
+              canEdit={canEdit}
+              canManageRepeat={canManageRepeat}
+              onTaskClick={setSelectedTask}
+              onTaskCreated={handleTaskCreated}
+              onColumnDeleted={handleColumnDeleted}
+              onColumnUpdated={handleColumnUpdated}
+            />
+          </DragDropContext>
+        )}
+      </div>
+
+      {/* ─── DESKTOP: toate coloanele orizontal ─── */}
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="board" type="COLUMN" direction="horizontal">
           {(provided) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="flex flex-col md:flex-row md:overflow-x-auto gap-4 pb-4 scrollbar-thin"
+              className="hidden md:flex md:flex-row md:overflow-x-auto gap-4 pb-4 scrollbar-thin"
             >
               {columns.map((column, index) => (
                 <Draggable

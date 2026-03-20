@@ -58,7 +58,7 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
   function handleSwitchWorkspace(slug: string) {
   setSwitcherOpen(false)
   setMobileSwitcherOpen(false)
-  router.push('/dashboard')
+  router.push(`/workspace/${slug}/projects`)
 }
 
   function handleNavClick(href: string, e: React.MouseEvent) {
