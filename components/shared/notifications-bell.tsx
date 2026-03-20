@@ -22,7 +22,6 @@ export function NotificationsBell({ userId }: NotificationsBellProps) {
   useEffect(() => {
     loadNotifications()
 
-    // Realtime subscription
     const channel = supabase
       .channel('notifications')
       .on(
@@ -76,7 +75,12 @@ export function NotificationsBell({ userId }: NotificationsBellProps) {
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-80 bg-popover border border-border rounded-xl shadow-xl z-20 overflow-hidden">
+          {/* Pe mobil: fixed centrat, pe desktop: absolute right-0 */}
+          <div className="
+            fixed left-2 right-2 top-16 z-20
+            sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80
+            bg-popover border border-border rounded-xl shadow-xl overflow-hidden
+          ">
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <h3 className="font-semibold text-sm">{t('notification.title')}</h3>
               {unreadCount > 0 && (

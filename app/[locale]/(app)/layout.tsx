@@ -32,7 +32,8 @@ export default async function AppLayout({
       <AppSidebar workspaces={workspaces || []} userId={user.id} locale={locale} />
       <div className="flex-1 flex flex-col min-w-0">
         <AppHeader userId={user.id} />
-        <main className="flex-1 overflow-auto page-enter">
+        {/* pb-16 pe mobil ca sa nu fie continutul ascuns sub bottom nav */}
+        <main className="flex-1 overflow-auto page-enter pb-16 md:pb-0">
           {children}
         </main>
       </div>

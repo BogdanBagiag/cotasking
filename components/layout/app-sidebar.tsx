@@ -17,6 +17,7 @@ import {
   ChevronsUpDown,
   Check,
   Loader2,
+  X,
 } from 'lucide-react'
 
 interface AppSidebarProps {
@@ -32,6 +33,7 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
   const [isPending, startTransition] = useTransition()
   const [createWsOpen, setCreateWsOpen] = useState(false)
   const [switcherOpen, setSwitcherOpen] = useState(false)
+  const [mobileSwitcherOpen, setMobileSwitcherOpen] = useState(false)
   const [pendingHref, setPendingHref] = useState<string | null>(null)
   const switcherRef = useRef<HTMLDivElement>(null)
 
@@ -55,6 +57,7 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
 
   function handleSwitchWorkspace(slug: string) {
     setSwitcherOpen(false)
+    setMobileSwitcherOpen(false)
     router.push(`/workspace/${slug}/projects`)
   }
 
@@ -92,14 +95,14 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
       ]
     : []
 
-  // Bottom nav items for mobile (dashboard + workspace nav)
   const bottomNavItems = [
     {
       href: '/dashboard',
       icon: LayoutDashboard,
       label: t('nav.dashboard'),
+      isWorkspaceTrigger: workspaces.length > 1,
     },
-    ...workspaceNav,
+    ...workspaceNav.map((item) => ({ ...item, isWorkspaceTrigger: false })),
   ]
 
   return (
@@ -122,16 +125,10 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
               className="flex items-center gap-2 w-full rounded-lg px-2 py-2 hover:bg-accent transition-colors cursor-pointer group"
             >
               {currentWorkspace?.logo_url ? (
-                <img
-                  src={currentWorkspace.logo_url}
-                  alt={currentWorkspace.name}
-                  className="w-7 h-7 rounded-md object-cover"
-                />
+                <img src={currentWorkspace.logo_url} alt={currentWorkspace.name} className="w-7 h-7 rounded-md object-cover" />
               ) : (
                 <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
-                  <span className="text-xs font-bold text-primary">
-                    {getInitials(currentWorkspace?.name || 'W')}
-                  </span>
+                  <span className="text-xs font-bold text-primary">{getInitials(currentWorkspace?.name || 'W')}</span>
                 </div>
               )}
               <div className="flex-1 min-w-0 text-left">
@@ -144,25 +141,18 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
             {switcherOpen && (
               <div className="absolute left-3 right-3 top-full mt-1 z-50 bg-popover border border-border rounded-lg shadow-lg py-1 max-h-64 overflow-y-auto">
                 {workspaces.map((ws) => (
-                  <button
-                    key={ws.id}
-                    onClick={() => handleSwitchWorkspace(ws.slug)}
+                  <button key={ws.id} onClick={() => handleSwitchWorkspace(ws.slug)}
                     className="flex items-center gap-2 w-full px-3 py-2 hover:bg-accent transition-colors text-left"
                   >
                     <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
-                      <span className="text-[10px] font-bold text-primary">
-                        {getInitials(ws.name)}
-                      </span>
+                      <span className="text-[10px] font-bold text-primary">{getInitials(ws.name)}</span>
                     </div>
                     <span className="text-sm truncate flex-1">{ws.name}</span>
-                    {ws.slug === currentWorkspace?.slug && (
-                      <Check className="w-3.5 h-3.5 text-primary shrink-0" />
-                    )}
+                    {ws.slug === currentWorkspace?.slug && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
                   </button>
                 ))}
                 <div className="border-t border-border mt-1 pt-1">
-                  <button
-                    onClick={() => { setSwitcherOpen(false); setCreateWsOpen(true) }}
+                  <button onClick={() => { setSwitcherOpen(false); setCreateWsOpen(true) }}
                     className="flex items-center gap-2 w-full px-3 py-2 hover:bg-accent transition-colors text-left text-muted-foreground"
                   >
                     <Plus className="w-4 h-4" />
@@ -176,20 +166,11 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-1 scrollbar-thin">
-          <Link
-            href="/dashboard"
+          <Link href="/dashboard"
             onClick={(e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick('/dashboard', e)}
-            className={cn(
-              'sidebar-item',
-              pathname === '/dashboard' && 'active',
-              pendingHref === '/dashboard' && 'bg-accent/50'
-            )}
+            className={cn('sidebar-item', pathname === '/dashboard' && 'active', pendingHref === '/dashboard' && 'bg-accent/50')}
           >
-            {pendingHref === '/dashboard' ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <LayoutDashboard className="w-4 h-4" />
-            )}
+            {pendingHref === '/dashboard' ? <Loader2 className="w-4 h-4 animate-spin" /> : <LayoutDashboard className="w-4 h-4" />}
             {t('nav.dashboard')}
           </Link>
 
@@ -202,21 +183,10 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
                 const isActive = pathname.startsWith(href)
                 const isPendingThis = pendingHref === href
                 return (
-                  <Link
-                    key={href}
-                    href={href}
-                    onClick={(e) => handleNavClick(href, e)}
-                    className={cn(
-                      'sidebar-item',
-                      isActive && 'active',
-                      isPendingThis && !isActive && 'bg-accent/50'
-                    )}
+                  <Link key={href} href={href} onClick={(e) => handleNavClick(href, e)}
+                    className={cn('sidebar-item', isActive && 'active', isPendingThis && !isActive && 'bg-accent/50')}
                   >
-                    {isPendingThis && !isActive ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Icon className="w-4 h-4" />
-                    )}
+                    {isPendingThis && !isActive ? <Loader2 className="w-4 h-4 animate-spin" /> : <Icon className="w-4 h-4" />}
                     {label}
                   </Link>
                 )
@@ -226,10 +196,7 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
         </nav>
 
         <div className="px-3 py-3 border-t border-border">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
+          <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
             onClick={() => setCreateWsOpen(true)}
           >
             <Plus className="w-4 h-4" />
@@ -239,8 +206,8 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
       </aside>
 
       {/* ─── MOBILE BOTTOM NAV ─── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border flex items-center justify-around px-2 py-2 safe-area-pb">
-        {bottomNavItems.slice(0, 5).map(({ href, icon: Icon, label }) => {
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border flex items-center justify-around px-2 py-2">
+        {bottomNavItems.slice(0, 5).map(({ href, icon: Icon, label, isWorkspaceTrigger }) => {
           const isActive = href === '/dashboard'
             ? pathname === '/dashboard'
             : pathname.startsWith(href)
@@ -250,23 +217,24 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
             <Link
               key={href}
               href={href}
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(href, e)}
+              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                if (isWorkspaceTrigger) {
+                  e.preventDefault()
+                  setMobileSwitcherOpen(true)
+                  return
+                }
+                handleNavClick(href, e)
+              }}
               className={cn(
                 'flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-colors min-w-[48px]',
-                isActive
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-foreground'
+                isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               )}
             >
-              <div className={cn(
-                'p-1.5 rounded-xl transition-colors',
-                isActive && 'bg-primary/10'
-              )}>
-                {isPendingThis && !isActive ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <Icon className="w-5 h-5" />
-                )}
+              <div className={cn('p-1.5 rounded-xl transition-colors', isActive && 'bg-primary/10')}>
+                {isPendingThis && !isActive
+                  ? <Loader2 className="w-5 h-5 animate-spin" />
+                  : <Icon className="w-5 h-5" />
+                }
               </div>
               <span className="text-[10px] font-medium leading-none">{label}</span>
             </Link>
@@ -274,13 +242,48 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
         })}
       </nav>
 
-      {/* Spacer so content doesn't hide behind bottom nav on mobile */}
-      <div className="md:hidden h-16" />
+      {/* ─── MOBILE WORKSPACE SWITCHER MODAL ─── */}
+      {mobileSwitcherOpen && (
+        <>
+          <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setMobileSwitcherOpen(false)} />
+          <div className="fixed bottom-20 left-4 right-4 z-50 bg-popover border border-border rounded-2xl shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+              <h3 className="font-semibold text-sm">{t('workspace.switchWorkspace')}</h3>
+              <button onClick={() => setMobileSwitcherOpen(false)} className="p-1 rounded-lg hover:bg-accent">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="py-2 max-h-64 overflow-y-auto">
+              {workspaces.map((ws) => (
+                <button key={ws.id} onClick={() => handleSwitchWorkspace(ws.slug)}
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-accent transition-colors text-left"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <span className="text-xs font-bold text-primary">{getInitials(ws.name)}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold truncate">{ws.name}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{ws.plan?.replace('_', ' ')}</p>
+                  </div>
+                  {ws.slug === currentWorkspace?.slug && <Check className="w-4 h-4 text-primary shrink-0" />}
+                </button>
+              ))}
+              <div className="border-t border-border mt-1 pt-1">
+                <button onClick={() => { setMobileSwitcherOpen(false); setCreateWsOpen(true) }}
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-accent transition-colors text-left text-muted-foreground"
+                >
+                  <div className="w-8 h-8 rounded-lg border-2 border-dashed border-border flex items-center justify-center shrink-0">
+                    <Plus className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm">{t('workspace.create')}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
-      <CreateWorkspaceDialog
-        open={createWsOpen}
-        onOpenChange={setCreateWsOpen}
-      />
+      <CreateWorkspaceDialog open={createWsOpen} onOpenChange={setCreateWsOpen} />
     </>
   )
 }
