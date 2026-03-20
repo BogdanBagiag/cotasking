@@ -26,6 +26,8 @@ interface AppSidebarProps {
   locale: string
 }
 
+const STORAGE_KEY = 'selectedWorkspaceSlug'
+
 export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
   const t = useTranslations()
   const pathname = usePathname()
@@ -35,7 +37,14 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
   const [switcherOpen, setSwitcherOpen] = useState(false)
   const [mobileSwitcherOpen, setMobileSwitcherOpen] = useState(false)
   const [pendingHref, setPendingHref] = useState<string | null>(null)
+  const [savedSlug, setSavedSlug] = useState<string | null>(null)
   const switcherRef = useRef<HTMLDivElement>(null)
+
+  // Citim slug-ul salvat din localStorage la mount
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) setSavedSlug(saved)
+  }, [])
 
   useEffect(() => {
     setPendingHref(null)
@@ -53,13 +62,28 @@ export function AppSidebar({ workspaces, userId, locale }: AppSidebarProps) {
 
   const workspaceMatch = pathname.match(/\/workspace\/([^\/]+)/)
   const currentSlug = workspaceMatch?.[1]
-  const currentWorkspace = workspaces.find((w) => w.slug === currentSlug) || workspaces[0]
+
+  // Prioritate: slug din URL > slug salvat în localStorage > primul workspace
+  const currentWorkspace =
+    workspaces.find((w) => w.slug === currentSlug) ||
+    workspaces.find((w) => w.slug === savedSlug) ||
+    workspaces[0]
+
+  // Când suntem pe o pagină cu workspace în URL, salvăm slug-ul automat
+  useEffect(() => {
+    if (currentSlug) {
+      localStorage.setItem(STORAGE_KEY, currentSlug)
+      setSavedSlug(currentSlug)
+    }
+  }, [currentSlug])
 
   function handleSwitchWorkspace(slug: string) {
-  setSwitcherOpen(false)
-  setMobileSwitcherOpen(false)
-  router.push(`/workspace/${slug}/projects`)
-}
+    setSwitcherOpen(false)
+    setMobileSwitcherOpen(false)
+    localStorage.setItem(STORAGE_KEY, slug)
+    setSavedSlug(slug)
+    router.push('/dashboard')
+  }
 
   function handleNavClick(href: string, e: React.MouseEvent) {
     if (pathname.startsWith(href)) return
